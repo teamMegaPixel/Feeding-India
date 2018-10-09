@@ -9,6 +9,7 @@ public class DonationDetails {
     private HashMap<String,Object> donorAddress;
     private String imageUrl;
    private String hungerSpotImgUrl;
+   private String foodType;
 
 
     public DonationDetails() {
@@ -69,6 +70,11 @@ public class DonationDetails {
         else
             return null;
     }
+
+    public void setFoodType(String typeOfFood){
+        foodType = typeOfFood;
+    }
+    public String getFoodType(){return foodType;}
     public void setImageUrl(String imageUrl){
         this.imageUrl = imageUrl;
     }

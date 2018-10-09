@@ -48,7 +48,7 @@ public class DonateFragment extends Fragment  {
     public static String state,city,donorAddress,pinCode,foodDescription,foodPreparedOn,additionalContactNumber;
     private SharedPreferences mSharedPreferences;
     private HashMap<String,Object> address;
-    private RadioButton hasContainerYesRadioButton,hasContainerNoRadioButton;
+    private RadioButton hasContainerYesRadioButton,hasContainerNoRadioButton,isVegFood,isNonVegFood;
     private Button submitButton;
     private ImageButton locationButton;
     private DatabaseReference mDatabaseReference;
@@ -62,6 +62,8 @@ public class DonateFragment extends Fragment  {
     private static final int PICK_IMAGE = 100;
     private Uri imageUri;
     private String imageUrl;
+    private StorageReference photoRef;
+    //private String
 
 
     public DonateFragment(){
@@ -96,16 +98,13 @@ public class DonateFragment extends Fragment  {
         hasContainerYesRadioButton = view.findViewById(R.id.hasContainerYesRadioButton);
         hasContainerNoRadioButton = view.findViewById(R.id.hasContainerNoRadioButton);
         submitButton = view.findViewById(R.id.submitButton);
+        isVegFood = view.findViewById(R.id.vegFood);
+        isNonVegFood = view.findViewById(R.id.nonVegFood);
 
         // -------------food image changes--------------/////
 
         mFoodImageButton = view.findViewById(R.id.food_image_button);
-        mFoodImageButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                openGallery();
-            }
-        });
+
         return view;
 
     }
@@ -123,35 +122,9 @@ public class DonateFragment extends Fragment  {
         if(resultCode == RESULT_OK && requestCode == PICK_IMAGE){
             imageUri = data.getData();
             mFoodImageButton.setImageURI(imageUri);
-            final StorageReference photoRef =
+             photoRef =
                     mPhotoStorageReference.child(imageUri.getLastPathSegment());
-            UploadTask uploadTask = photoRef.putFile(imageUri);
-            Task<Uri> urlTask = uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
-                @Override
-                public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
-                    if (!task.isSuccessful()) {
-                        Toast.makeText(getContext(), "unable to upload image", Toast.LENGTH_SHORT).show();
-                        throw task.getException();
-                    }
 
-                    // Continue with the task to get the download URL
-                    return photoRef.getDownloadUrl();
-                }
-            }).addOnCompleteListener(new OnCompleteListener<Uri>() {
-                @Override
-                public void onComplete(@NonNull Task<Uri> task) {
-                    if (task.isSuccessful()) {
-                        Uri downloadUri = task.getResult();
-                        imageUrl = downloadUri.toString();
-                        Log.i("download url",downloadUri.toString());
-                        Toast.makeText(getContext(), "Image Uploaded", Toast.LENGTH_SHORT).show();
-                    } else {
-                        // Handle failures
-                        // ...
-                        Toast.makeText(getContext(), "Image not uploaded", Toast.LENGTH_SHORT).show();
-                    }
-                }
-            });
         }
     }
 
@@ -193,6 +166,19 @@ public class DonateFragment extends Fragment  {
                 onClickLocationButton();
             }
         });
+        mFoodImageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openGallery();
+            }
+        });
+
+        isVegFood.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
+            }
+        });
 
     }
 
@@ -215,6 +201,31 @@ public class DonateFragment extends Fragment  {
                 address.put("pinCode", pinCode);
                 address.put("latitude", Double.toString(latitude));
                 address.put("longitude", Double.toString(longitude));
+
+            UploadTask uploadTask = photoRef.putFile(imageUri);
+            Task<Uri> urlTask = uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
+                @Override
+                public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
+                    if (!task.isSuccessful()) {
+                        Toast.makeText(getContext(), "unable to upload image", Toast.LENGTH_SHORT).show();
+                        throw task.getException();
+                    }
+
+                    return photoRef.getDownloadUrl();
+                }
+            }).addOnCompleteListener(new OnCompleteListener<Uri>() {
+                @Override
+                public void onComplete(@NonNull Task<Uri> task) {
+                    if (task.isSuccessful()) {
+                        Uri downloadUri = task.getResult();
+                        imageUrl = downloadUri.toString();
+                        Log.i("download url",downloadUri.toString());
+                        Toast.makeText(getContext(), "Image Uploaded", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(getContext(), "Image not uploaded", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
 
                 askIfUserCanDeliver();
 
@@ -284,7 +295,6 @@ public class DonateFragment extends Fragment  {
     private void onClickLocationButton(){
         Intent intent = new Intent(getContext(),FoodLocation.class);
         startActivity(intent);
-        //Map view for selecting user location
     }
 
     private void makeToast(String message){

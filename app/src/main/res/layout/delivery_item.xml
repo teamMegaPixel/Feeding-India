@@ -16,6 +16,37 @@
             android:layout_height="match_parent"
             android:padding="@dimen/margin_ten_dp"
             android:orientation="vertical">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Donor Name"
+                android:textSize="18sp"
+                android:textColor="@color/stratos"
+                android:layout_margin="@dimen/root_layout_margin" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:textSize="16sp"
+                android:textColor="@color/sienna"
+                android:layout_margin="@dimen/root_layout_margin" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Donor Contact"
+                android:textSize="18sp"
+                android:textColor="@color/stratos"
+                android:layout_margin="@dimen/root_layout_margin" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:textSize="16sp"
+                android:textColor="@color/sienna"
+                android:layout_margin="@dimen/root_layout_margin" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -65,6 +96,21 @@
                 android:layout_height="wrap_content"
                 android:text=""
                 android:id="@+id/status"
+                android:textSize="16sp"
+                android:textColor="@color/sienna"
+                android:layout_margin="@dimen/root_layout_margin" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Time Of Delivery"
+                android:textSize="18sp"
+                android:textColor="@color/stratos"
+                android:layout_margin="@dimen/root_layout_margin" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=""
                 android:textSize="16sp"
                 android:textColor="@color/sienna"
                 android:layout_margin="@dimen/root_layout_margin" />
