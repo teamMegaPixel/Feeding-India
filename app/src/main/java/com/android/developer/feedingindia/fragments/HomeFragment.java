@@ -173,29 +173,29 @@ public class HomeFragment extends Fragment {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-                if(dataSnapshot.getChildrenCount()!=0) {
-                    HashMap<String,Object> myMap = (HashMap)dataSnapshot.getValue();
-
-                    Set mSet = myMap.entrySet();
-
-                    Iterator iterator = mSet.iterator();
-
-                    Map.Entry<String,Object> entry = (Map.Entry)iterator.next();
-
-                    ObjectMapper objectMapper = new ObjectMapper();
-
-                    DeliveryDetails deliveryDetails = objectMapper.convertValue(entry.getValue(),DeliveryDetails.class);
-
-                    HashMap<String,String> donorAddress = deliveryDetails.getDonorAddress();
-                    HashMap<String,String> hungerSpotAddress = deliveryDetails.getHungerSpotAddress();
-
-                     donorLocation = new LatLng(Double.parseDouble(donorAddress.get("latitude")),Double.parseDouble(donorAddress.get("longitude")));
-                     hungerSpotLocation = new LatLng(Double.parseDouble(hungerSpotAddress.get("latitude")),Double.parseDouble(hungerSpotAddress.get("longitude")));
-
-                    if(mSharedPreferences.getString("userType","").equals("hungerhero")&&!CURRENT_TAG.equals("Donate"))
-                        loadFragment(new CollectAndDeliverFragment());
-
-                }
+//                if(dataSnapshot.getChildrenCount()!=0) {
+//                    HashMap<String,Object> myMap = (HashMap)dataSnapshot.getValue();
+//
+//                    Set mSet = myMap.entrySet();
+//
+//                    Iterator iterator = mSet.iterator();
+//
+//                    Map.Entry<String,Object> entry = (Map.Entry)iterator.next();
+//
+//                    ObjectMapper objectMapper = new ObjectMapper();
+//
+//                    DeliveryDetails deliveryDetails = objectMapper.convertValue(entry.getValue(),DeliveryDetails.class);
+//
+//                    HashMap<String,String> donorAddress = deliveryDetails.getDonorAddress();
+//                    HashMap<String,String> hungerSpotAddress = deliveryDetails.getHungerSpotAddress();
+//
+//                     donorLocation = new LatLng(Double.parseDouble(donorAddress.get("latitude")),Double.parseDouble(donorAddress.get("longitude")));
+//                     hungerSpotLocation = new LatLng(Double.parseDouble(hungerSpotAddress.get("latitude")),Double.parseDouble(hungerSpotAddress.get("longitude")));
+//
+//                    if(mSharedPreferences.getString("userType","").equals("hungerhero")&&!CURRENT_TAG.equals("Donate"))
+//                        loadFragment(new CollectAndDeliverFragment());
+//
+//                }
 
                 enableUserInterAction();
             }

@@ -203,7 +203,8 @@ public class DonateFragment extends Fragment  {
                 address.put("longitude", Double.toString(longitude));
 
             UploadTask uploadTask = photoRef.putFile(imageUri);
-            Task<Uri> urlTask = uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
+
+            uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
                 @Override
                 public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
                     if (!task.isSuccessful()) {
@@ -273,13 +274,13 @@ public class DonateFragment extends Fragment  {
 
     private void push(boolean canDonate, String deliverer ){
 
-        DonationDetails donationDetails = new DonationDetails(foodDescription,foodPreparedOn,
-                additionalContactNumber,"pending",mSharedPreferences.getString("mobileNumber",""),
-                hasContainer,canDonate,deliverer,address);
-        if(imageUrl != null){
-            donationDetails.setImageUrl(imageUrl);
-        }
-        mDatabaseReference.push().setValue(donationDetails);
+//        DonationDetails donationDetails = new DonationDetails(foodDescription,foodPreparedOn,
+//                additionalContactNumber,"pending",mSharedPreferences.getString("mobileNumber",""),
+//                hasContainer,canDonate,deliverer,address);
+//        if(imageUrl != null){
+//            donationDetails.setImageUrl(imageUrl);
+//        }
+//        mDatabaseReference.push().setValue(donationDetails);
 
     }
 

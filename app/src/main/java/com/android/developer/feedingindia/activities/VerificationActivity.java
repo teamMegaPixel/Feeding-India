@@ -237,7 +237,7 @@ public class VerificationActivity extends AppCompatActivity {
                           userCity,HungerHeroSignUpActivity.locality,HungerHeroSignUpActivity.pinCode,
                           HungerHeroSignUpActivity.reasonForJoining,HungerHeroSignUpActivity.affordableTime,
                           HungerHeroSignUpActivity.responsibility,HungerHeroSignUpActivity.currentlyPartOf,
-                          HungerHeroSignUpActivity.introducedToFIThrough,HungerHeroSignUpActivity.aboutMeList,false,"hungerhero");
+                          HungerHeroSignUpActivity.introducedToFIThrough,HungerHeroSignUpActivity.aboutMeList,false,"hungerhero",false);
 
                         mDatabaseReference.child(mAuth.getCurrentUser().getUid()).setValue(hungerHero).addOnCompleteListener(new OnCompleteListener<Void>() {
                             @Override

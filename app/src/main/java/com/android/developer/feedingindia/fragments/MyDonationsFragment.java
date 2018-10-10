@@ -1,53 +1,41 @@
 package com.android.developer.feedingindia.fragments;
 
-import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
-import android.widget.TextView;
-
+import android.widget.Toast;
 import com.android.developer.feedingindia.R;
-import com.android.developer.feedingindia.adapters.DeliveriesAdapter;
 import com.android.developer.feedingindia.adapters.DonationAdapter;
 import com.android.developer.feedingindia.pojos.DonationDetails;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Set;
 
 public class MyDonationsFragment extends Fragment {
 
     private DatabaseReference donationDatabaseReference;
-    private long userDonationCount = 0;
+    private ChildEventListener mChildEventListener;
+    private long userDonationCount,readCount;
     private ProgressBar progressBar;
-    private LinearLayout mLinearLayout;
-    private HashMap<String,DonationDetails> userDonationList;
+    private ArrayList<DonationDetails> userDonationList;
     private RecyclerView mRecyclerView;
-    private RecyclerView.Adapter mAdapter;
-    private RecyclerView.LayoutManager mLayoutManager;
-    private static DeliveriesAdapter.ClickListener clickListener;
-    private int pos;
-
-    private ArrayList<String> tags = new ArrayList<>();
-    private ArrayList<DonationDetails> userDonations = new ArrayList<>();
+    private DonationAdapter mAdapter;
+    private ArrayList<String> donationIdList;
     private android.support.v7.app.AlertDialog mAlertDialog;
     private android.support.v7.app.AlertDialog.Builder mBuilder;
 
@@ -58,11 +46,56 @@ public class MyDonationsFragment extends Fragment {
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
-        userDonationList = new HashMap<>();
-        userDonationCount = 0;
+        userDonationList = new ArrayList<>();
+        donationIdList = new ArrayList<>();
+        userDonationCount = readCount = 0;
         donationDatabaseReference = FirebaseDatabase.getInstance().getReference().child("Donations").
                         child(FirebaseAuth.getInstance().getUid());
+
+        mChildEventListener = new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+                DonationDetails donationDetails = dataSnapshot.getValue(DonationDetails.class);
+                userDonationList.add(donationDetails);
+                donationIdList.add(dataSnapshot.getKey());
+
+                readCount++;
+
+                if(readCount == userDonationCount)
+                    enableUserInteraction();
+
+            }
+
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        };
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
+            mBuilder = new android.support.v7.app.AlertDialog.Builder(getContext(), android.R.style.Theme_Material_Dialog_Alert);
+        else
+            mBuilder = new android.support.v7.app.AlertDialog.Builder(getContext());
+
+
     }
 
 
@@ -72,8 +105,7 @@ public class MyDonationsFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_my_donations, container, false);
         progressBar = view.findViewById(R.id.progressBar);
-        mRecyclerView = view.findViewById(R.id.donations_view);
-        mLinearLayout = view.findViewById(R.id.my_donations_container);
+        mRecyclerView = view.findViewById(R.id.donations_container);
 
         return  view;
     }
@@ -83,38 +115,35 @@ public class MyDonationsFragment extends Fragment {
         super.onResume();
 
         progressBar.setVisibility(View.VISIBLE);
-        mLinearLayout.setVisibility(View.INVISIBLE);
-        donationDatabaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+        mRecyclerView.setVisibility(View.INVISIBLE);
 
-                userDonationCount = dataSnapshot.getChildrenCount();
+        if(userDonationList.size() == 0) {
 
-                if(userDonationCount == 0)
-                    enableUserInteraction();
-                else {
+            donationDatabaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-                    ObjectMapper objectMapper = new ObjectMapper();
-                    HashMap<String,HashMap<String,Object>> myList = (HashMap<String,HashMap<String,Object>>)dataSnapshot.getValue();
-                    Set mySet = myList.entrySet();
-                    Iterator iterator = mySet.iterator();
-                    while(iterator.hasNext()){
-                        Map.Entry myMapEntry =(Map.Entry) iterator.next();
-                        DonationDetails donationDetails = objectMapper.convertValue(myMapEntry.getValue(), DonationDetails.class);
-                            userDonationList.put(myMapEntry.getKey().toString(),donationDetails);
-                        Log.i("userDoantion",userDonationList.toString());
-                    }
+                    userDonationCount = readCount = 0;
+                    userDonationList = new ArrayList<>();
+                    donationIdList = new ArrayList<>();
 
-                    enableUserInteraction();
+                    userDonationCount = dataSnapshot.getChildrenCount();
+
+                    if (userDonationCount == 0)
+                        enableUserInteraction();
+                    else
+                        donationDatabaseReference.addChildEventListener(mChildEventListener);
+
                 }
 
-            }
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
+                    makeToast(databaseError.getMessage());
 
-            }
-        });
+                }
+            });
+        }
 
     }
 
@@ -122,16 +151,13 @@ public class MyDonationsFragment extends Fragment {
     public void onPause() {
         super.onPause();
 
-        userDonationCount = 0;
-        userDonationList.clear();
-    }
+        if(mChildEventListener != null)
+            donationDatabaseReference.removeEventListener(mChildEventListener);
 
 
-    private void onClickDelete(String pushID){
-
-        DatabaseReference mDatabaseReference = FirebaseDatabase.getInstance().getReference().child("Donations").
-                child(FirebaseAuth.getInstance().getUid()).child(pushID);
-        mDatabaseReference.removeValue();
+        if(mAlertDialog!=null)
+            if(mAlertDialog.isShowing())
+                mAlertDialog.cancel();
 
     }
 
@@ -139,14 +165,63 @@ public class MyDonationsFragment extends Fragment {
     {
 
         progressBar.setVisibility(View.GONE);
-        mLinearLayout.setVisibility(View.VISIBLE);
+        mRecyclerView.setVisibility(View.VISIBLE);
 
-        mAdapter = new DonationAdapter(userDonationList);
-        LinearLayoutManager manager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
-        mRecyclerView.setLayoutManager(manager);
-        mRecyclerView.setAdapter(mAdapter);
+        buildRecyclerView();
+
+    }
+
+    private void buildRecyclerView(){
+
         mRecyclerView.setHasFixedSize(true);
+        mRecyclerView.setNestedScrollingEnabled(false);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
+        mAdapter = new DonationAdapter(userDonationList);
+        mRecyclerView.setAdapter(mAdapter);
+        attachListenerToRecyclerView();
 
+    }
+
+    private void attachListenerToRecyclerView() {
+
+        mAdapter.setOnItemClickListener(new DonationAdapter.OnClickListener() {
+            @Override
+            public void onClick(final int position) {
+
+                if(userDonationList.get(position).getStatus().equals("pending")){
+
+                    mAlertDialog = mBuilder.setMessage("Do you want to cancel the donation?").
+                            setTitle("Cancel Donation").
+                            setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+
+                                    donationDatabaseReference.child(donationIdList.get(position)).removeValue();
+                                    userDonationList.remove(position);
+                                    donationIdList.remove(position);
+                                    mAdapter.notifyItemRemoved(position);
+
+                                }
+                            }).setNegativeButton("No",null).create();
+
+                    mAlertDialog.show();
+
+                }
+            }
+
+            @Override
+            public void onClickImage(ImageView view, int position) {
+
+                //Intent to Enlarged ImageView Activity
+
+            }
+        });
+
+    }
+
+    private void makeToast(String message){
+
+        Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
 
     }
 }

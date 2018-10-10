@@ -1421,7 +1421,18 @@
 
     </string-array>
 
-    <string name="navigation_drawer_open">Open Navigation Drawer</string>'
+    <string name="navigation_drawer_open">Open Navigation Drawer</string>
     <string name="navigation_drawer_close">Close Navigation Drawer</string>
+
+    <!-- Delivery Item -->
+    <string name="donor_name">Donor Name</string>
+    <string name="donor_contact_number">Donor Contact Number</string>
+    <string name="donation_image">Donation Image</string>
+    <string name="delivery_image">Delivery Image</string>
+
+    <!-- Donation Item -->
+    <string name="food_type">Type of Food</string>
+    <string name="deliverer_name">Deliverer Name</string>
+    <string name="deliverer_contact_number">Deliverer Contact Number</string>
 
 </resources>

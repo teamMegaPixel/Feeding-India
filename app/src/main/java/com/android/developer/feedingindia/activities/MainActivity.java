@@ -184,11 +184,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 addedAdminMenuItems = true;
             }
 
+
     }
 
     private void addAdminMenuItems(String userType){
 
         Menu menu = mNavigationView.getMenu();
+        menu.removeItem(R.id.nav_menu_contact_us);
         if(userType.equals("superadmin"))
         menu.add(0, MAKE_ADMIN_ID, 700, TAG_MAKE_ADMIN);
         menu.add(0,POST_NOTIFICATION_ID,800,TAG_POST_NOTIFICATION);

@@ -7,13 +7,13 @@ public class HungerHero {
     private String name,dateOfBirth,email,mobileNumber,userType,educationalBackground,state,city,locality,pinCode,
             reasonForJoining,affordableTime,responsibility,currentlyPartOf,previousRole;
     private ArrayList<String> introducedToFIThrough,aboutMe;
-    private boolean requestedToBeAdmin;
+    private boolean requestedToBeAdmin,emailVerified;
 
     public HungerHero(){
 
     }
 
-    public HungerHero(String name, String dateOfBirth, String email, String mobileNumber, String userType, String educationalBackground, String state, String city, String locality, String pinCode, String reasonForJoining, String affordableTime, String responsibility, String currentlyPartOf, ArrayList<String> introducedToFIThrough, ArrayList<String> aboutMe, boolean requestedToBeAdmin,String previousRole) {
+    public HungerHero(String name, String dateOfBirth, String email, String mobileNumber, String userType, String educationalBackground, String state, String city, String locality, String pinCode, String reasonForJoining, String affordableTime, String responsibility, String currentlyPartOf, ArrayList<String> introducedToFIThrough, ArrayList<String> aboutMe, boolean requestedToBeAdmin,String previousRole,boolean emailVerified) {
         this.name = name;
         this.dateOfBirth = dateOfBirth;
         this.email = email;
@@ -32,6 +32,7 @@ public class HungerHero {
         this.aboutMe = aboutMe;
         this.requestedToBeAdmin = requestedToBeAdmin;
         this.previousRole = previousRole;
+        this.emailVerified = emailVerified;
     }
 
     public String getName() {
@@ -104,5 +105,9 @@ public class HungerHero {
 
     public String getPreviousRole() {
         return previousRole;
+    }
+
+    public boolean isEmailVerified() {
+        return emailVerified;
     }
 }

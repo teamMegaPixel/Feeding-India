@@ -2,6 +2,7 @@ package com.android.developer.feedingindia.activities;
 
 import android.app.ProgressDialog;
 import android.content.res.Configuration;
+import android.os.CountDownTimer;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -78,6 +79,7 @@ public class ExistingHungerHeroActivity extends AppCompatActivity {
                  temp.put("requestedToBeAdmin",false);
                  temp.put("userType","hungerhero");
                  temp.put("previousRole","hungerhero");
+                 temp.put("emailVerified",true);
                  ObjectMapper mObjectMapper = new ObjectMapper();
                  final HungerHero hungerHero = mObjectMapper.convertValue(temp, HungerHero.class);
                  mAuth.createUserWithEmailAndPassword(userEmail,userPassword).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
@@ -92,11 +94,27 @@ public class ExistingHungerHeroActivity extends AppCompatActivity {
 
                                      if(task.isSuccessful()){
 
-                                         FirebaseDatabase.getInstance().getReference().child("Temporary").child(dataSnapshot.getKey()).removeValue();
                                          mAuth.signOut();
-                                         mProgressDialog.cancel();
-                                         makeToast("Welcome to Feeding India");
-                                         finish();
+                                         makeToast("Welcome to Feeding India!\nAccount Created\nYou can sign in with your email and password");
+                                         FirebaseDatabase.getInstance().getReference().child("Temporary").child(dataSnapshot.getKey()).removeValue();
+
+                                         CountDownTimer countDownTimer = new CountDownTimer(1000,1000) {
+                                             @Override
+                                             public void onTick(long l) {
+
+                                             }
+
+                                             @Override
+                                             public void onFinish() {
+
+                                                 mProgressDialog.cancel();
+                                                 moveTaskToBack(true);
+                                                 android.os.Process.killProcess(android.os.Process.myPid());
+                                                 System.exit(1);
+
+                                             }
+                                         }.start();
+
 
                                      }
                                      else{
@@ -150,6 +168,7 @@ public class ExistingHungerHeroActivity extends AppCompatActivity {
      };
 
     }
+
 
     @Override
     protected void onResume() {

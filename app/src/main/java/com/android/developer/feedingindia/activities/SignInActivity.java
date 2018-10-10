@@ -43,7 +43,7 @@ public class SignInActivity extends AppCompatActivity {
     private AlertDialog mAlertDialog;
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthStateListener;
-    private  FirebaseUser mFireBaseUser;
+    private FirebaseUser mFireBaseUser;
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -130,9 +130,8 @@ public class SignInActivity extends AppCompatActivity {
                 if (mFireBaseUser != null) {
                     //Signed In
 
-                    if(!mSharedPreferences.getString("email","").equals(mAuth.getCurrentUser().getEmail())){
 
-                        final DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("Temporary").child("jhffh");
+                    if(!mSharedPreferences.getString("email","").equals(mAuth.getCurrentUser().getEmail())){
 
                         //Fetch Data
                         DatabaseReference mDatabaseReference = FirebaseDatabase.getInstance().getReference().child("Users").child(mAuth.getUid());
@@ -140,7 +139,6 @@ public class SignInActivity extends AppCompatActivity {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-                                databaseReference.setValue(dataSnapshot.getValue());
                                 HashMap<String,Object> userData = (HashMap) dataSnapshot.getValue();
                                 String userType = userData.get("userType").toString();
                                 mSharedPreferences.edit().putString("email",userData.get("email").toString()).apply();
@@ -149,6 +147,9 @@ public class SignInActivity extends AppCompatActivity {
                                 mSharedPreferences.edit().putString("mobileNumber",userData.get("mobileNumber").toString()).apply();
                                 mSharedPreferences.edit().putString("name",userData.get("name").toString()).apply();
                                 mSharedPreferences.edit().putString("city",userData.get("city").toString()).apply();
+                                Log.i("Hello", "onDataChange: " + userType + mAuth.getCurrentUser().getEmail());
+                                if(userType.equals("hungerhero"))
+                                    mSharedPreferences.edit().putBoolean("emailVerified",(boolean)userData.get("emailVerified")).apply();
                                 if(userType.equals("hungerhero")) {
                                     checkIfEmailIsVerified();
                                 }
@@ -175,15 +176,18 @@ public class SignInActivity extends AppCompatActivity {
                     }
                     else {
 
+                        Log.i("Hello", "onAuthStateChanged: ");
                         String userType = mSharedPreferences.getString("userType","");
                         if(userType.equals("hungerhero")) {
                             checkIfEmailIsVerified();
                         }
                         else{
-                            if(mProgressDialog.isShowing())
-                                mProgressDialog.cancel();
-                            mIntent = new Intent(SignInActivity.this,MainActivity.class);
-                            startActivity(mIntent);
+                            if(!userType.equals("")) {
+                                if (mProgressDialog.isShowing())
+                                    mProgressDialog.cancel();
+                                mIntent = new Intent(SignInActivity.this, MainActivity.class);
+                                startActivity(mIntent);
+                            }
                         }
 
                     }
@@ -199,8 +203,9 @@ public class SignInActivity extends AppCompatActivity {
             mProgressDialog.cancel();
 
         if(mFireBaseUser!=null)
-        if (mFireBaseUser.isEmailVerified()) {
+        if (mFireBaseUser.isEmailVerified() || mSharedPreferences.getBoolean("emailVerified",false)) {
             //Check if the email is verified
+            Log.i("Hello", "checkIfEmailIsVerified: ");
             mIntent = new Intent(SignInActivity.this,MainActivity.class);
             startActivity(mIntent);
         }
@@ -217,6 +222,7 @@ public class SignInActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
 
+        mAuth = FirebaseAuth.getInstance();
         mAuth.addAuthStateListener(mAuthStateListener);
 
         if(mSharedPreferences.getBoolean("remember",false))
@@ -262,8 +268,10 @@ public class SignInActivity extends AppCompatActivity {
 
         //Detaching listener when the activity is no longer visible
 
-        if(mAuthStateListener!=null)
+        if(mAuthStateListener!=null) {
+            Log.i("Hello", "onPause: ");
             mAuth.removeAuthStateListener(mAuthStateListener);
+        }
 
         if(mAlertDialog.isShowing())
             mAlertDialog.dismiss();

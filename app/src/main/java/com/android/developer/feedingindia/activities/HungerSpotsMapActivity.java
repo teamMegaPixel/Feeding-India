@@ -2,6 +2,7 @@ package com.android.developer.feedingindia.activities;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
+import android.content.res.Configuration;
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.Handler;
@@ -237,9 +238,9 @@ public class HungerSpotsMapActivity extends AppCompatActivity implements OnMapRe
 
         DatabaseReference mDeliveryDatabaseReference = FirebaseDatabase.getInstance().getReference().child("Deliveries").
                child(FirebaseAuth.getInstance().getUid());
-        DeliveryDetails deliveryDetails = new DeliveryDetails(chosenDonationSpot,chosenHungerSpotPushId,
-                FeedFragment.chosenDonationAddress,hungerSpotAddress,"pending");
-        mDeliveryDatabaseReference.push().setValue(deliveryDetails);
+//        DeliveryDetails deliveryDetails = new DeliveryDetails(chosenDonationSpot,chosenHungerSpotPushId,
+//                FeedFragment.chosenDonationAddress,hungerSpotAddress,"pending");
+//        mDeliveryDatabaseReference.push().setValue(deliveryDetails);
         final DatabaseReference mDonationDatabaseReference = FirebaseDatabase.getInstance().getReference().child("Donations").
                 child(FirebaseAuth.getInstance().getUid()).child(FeedFragment.chosenDonationPushId);
 
@@ -374,9 +375,9 @@ public class HungerSpotsMapActivity extends AppCompatActivity implements OnMapRe
         return false;
     }
 
-
-
-
-
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+    }
 }
 

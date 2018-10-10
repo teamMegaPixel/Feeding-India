@@ -412,13 +412,13 @@ public class FeedFragment extends Fragment implements OnMapReadyCallback,GoogleM
             Map.Entry mMapMarkerEntry = (Map.Entry) iterator.next();
             DonationDetails mdonationDetails = (DonationDetails) mMapMarkerEntry.getValue();
             HashMap<String, Object> address = mdonationDetails.getDonorAddress();
-            imageUrls.put(id,mdonationDetails.getImageUrl());
+//            imageUrls.put(id,mdonationDetails.getImageUrl());
             Log.i("address",address.toString());
             Log.i("key",mMapMarkerEntry.getKey().toString());
             if(id.equals(mMapMarkerEntry.getKey())){
                 addressOfMarker = address.get("address")+"\n"+address.get("city")+"\n"+address.get("state")+"\n"+address.get("pinCode");
-                Donationinfo =  "Food Description :"+mdonationDetails.getFoodDescription()+"\n"+"Food was prepared on :"+mdonationDetails.getFoodPreparedOn()+"\n"+"Donor has container :"+mdonationDetails.isHasContainer()+"\n"+"Contact number 1 :"+mdonationDetails.getUserContactNumber()+"\n"+"Contact number 2 :"+mdonationDetails.getAdditionalContactNumber();
-                mSelectedImageUrl = mdonationDetails.getImageUrl();
+//                Donationinfo =  "Food Description :"+mdonationDetails.getFoodDescription()+"\n"+"Food was prepared on :"+mdonationDetails.getFoodPreparedOn()+"\n"+"Donor has container :"+mdonationDetails.isHasContainer()+"\n"+"Contact number 1 :"+mdonationDetails.getUserContactNumber()+"\n"+"Contact number 2 :"+mdonationDetails.getAdditionalContactNumber();
+//                mSelectedImageUrl = mdonationDetails.getImageUrl();
                 break;
             }
         }

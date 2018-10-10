@@ -43,11 +43,13 @@
             android:configChanges="screenSize|orientation" />
         <activity
             android:name=".activities.HungerSpotsMapActivity"
-            android:screenOrientation="portrait" />
+            android:configChanges="screenSize|orientation" />
         <activity
             android:name=".activities.ExistingHungerHeroActivity"
             android:configChanges="screenSize|orientation" />
-        <activity android:name=".activities.FoodLocation"></activity>
+        <activity
+            android:name=".activities.FoodLocation"
+            android:configChanges="screenSize|orientation"/>
         <!-- google maps api key -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"

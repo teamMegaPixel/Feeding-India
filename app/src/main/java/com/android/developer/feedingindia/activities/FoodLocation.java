@@ -2,6 +2,7 @@ package com.android.developer.feedingindia.activities;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
+import android.content.res.Configuration;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -199,4 +200,8 @@ public class FoodLocation extends AppCompatActivity implements OnMapReadyCallbac
         }
     }
 
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+    }
 }

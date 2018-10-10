@@ -181,7 +181,7 @@ public class FormFragment extends Fragment implements  View.OnClickListener,Comp
             mSharedPreferences.edit().putBoolean("clear",true).apply();
             HungerHero hungerHero = new HungerHero(name,dateOfBirth,email,mobileNumber,"hungerhero",
                     educationalBackground,state,city,locality,pinCode,reasonForJoining,affordableTime,responsibility,
-                    currentlyPartOf,introducedToFIThrough,aboutMeList,false,"hungerhero");
+                    currentlyPartOf,introducedToFIThrough,aboutMeList,false,"hungerhero",false);
             mDatabaseReference.setValue(hungerHero);
             mProgressDialog.cancel();
             makeToast("Congo! You are a "+responsibility+" now");

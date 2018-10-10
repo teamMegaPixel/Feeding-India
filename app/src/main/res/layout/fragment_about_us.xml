@@ -35,13 +35,13 @@
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_gravity="bottom"
-            android:src="@drawable/Facebook-icon" />
+            android:src="@drawable/facebook_icon" />
 
         <ImageButton
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_gravity="bottom"
-            android:src="@drawable/Twitter" />
+            android:src="@drawable/twitter" />
     </LinearLayout>
 
 </RelativeLayout>

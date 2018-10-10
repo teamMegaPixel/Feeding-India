@@ -4,28 +4,33 @@ import java.util.HashMap;
 
 public class DonationDetails {
 
-    private String foodDescription,foodPreparedOn,additionalContactNumber,status,userContactNumber,deliverer;
+    private String foodDescription,foodPreparedOn,additionalContactNumber,status,donorContactNumber,delivererName,donorName,delivererContactNumber;
     private boolean hasContainer,canDonate;
     private HashMap<String,Object> donorAddress;
-    private String imageUrl;
-   private String hungerSpotImgUrl;
-   private String foodType;
+    private String donationImageUrl,deliveryImgUrl;
+    private String foodType,deliveredOn;
 
-
-    public DonationDetails() {
+    public DonationDetails(){
 
     }
 
-    public DonationDetails(String foodDescription, String foodPreparedOn, String additionalContactNumber, String status, String userContactNumber, boolean hasContainer, boolean canDonate, String deliverer, HashMap<String, Object> donorAddress) {
+
+    public DonationDetails(String foodDescription, String foodPreparedOn, String additionalContactNumber, String status, String donorContactNumber, String delivererName, String donorName, String delivererContactNumber, boolean hasContainer, boolean canDonate, HashMap<String, Object> donorAddress, String donationImageUrl, String deliveryImgUrl, String foodType, String deliveredOn) {
         this.foodDescription = foodDescription;
         this.foodPreparedOn = foodPreparedOn;
         this.additionalContactNumber = additionalContactNumber;
         this.status = status;
-        this.userContactNumber = userContactNumber;
+        this.donorContactNumber = donorContactNumber;
+        this.delivererName = delivererName;
+        this.donorName = donorName;
+        this.delivererContactNumber = delivererContactNumber;
         this.hasContainer = hasContainer;
         this.canDonate = canDonate;
-        this.deliverer = deliverer;
         this.donorAddress = donorAddress;
+        this.donationImageUrl = donationImageUrl;
+        this.deliveryImgUrl = deliveryImgUrl;
+        this.foodType = foodType;
+        this.deliveredOn = deliveredOn;
     }
 
     public String getFoodDescription() {
@@ -44,8 +49,20 @@ public class DonationDetails {
         return status;
     }
 
-    public String getUserContactNumber() {
-        return userContactNumber;
+    public String getDonorContactNumber() {
+        return donorContactNumber;
+    }
+
+    public String getDelivererName() {
+        return delivererName;
+    }
+
+    public String getDonorName() {
+        return donorName;
+    }
+
+    public String getDelivererContactNumber() {
+        return delivererContactNumber;
     }
 
     public boolean isHasContainer() {
@@ -56,30 +73,24 @@ public class DonationDetails {
         return canDonate;
     }
 
-    public String getDeliverer() {
-        return deliverer;
-    }
-
-    public HashMap<String,Object> getDonorAddress() {
+    public HashMap<String, Object> getDonorAddress() {
         return donorAddress;
     }
 
-    public String getImageUrl(){
-        if(imageUrl != null)
-            return imageUrl;
-        else
-            return null;
+    public String getDonationImageUrl() {
+        return donationImageUrl;
     }
 
-    public void setFoodType(String typeOfFood){
-        foodType = typeOfFood;
-    }
-    public String getFoodType(){return foodType;}
-    public void setImageUrl(String imageUrl){
-        this.imageUrl = imageUrl;
+    public String getDeliveryImgUrl() {
+        return deliveryImgUrl;
     }
 
-    public String getHungerSpotImgUrl() {
-        return hungerSpotImgUrl;
+    public String getFoodType() {
+        return foodType;
     }
+
+    public String getDeliveredOn() {
+        return deliveredOn;
+    }
+    
 }
